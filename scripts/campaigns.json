@@ -1,0 +1,68 @@
+{
+  "campaigns": {
+    "campaign_1_gc_clo": {
+      "name": "Campaign 1 - GC / CLO Cold Outreach",
+      "sequence_id": "699deee1299e51000d383130",
+      "mailbox_id": "69a598bdfd80760021e01e93",
+      "sender": "Sarah Johnson <sarahjohnson@trycaseglide.com>",
+      "status": "active",
+      "launched": "2026-03-02",
+      "contacts_loaded": 7833,
+      "steps": 5,
+      "cadence_days": [1, 3, 6, 9, 14],
+      "schedule": "Mon-Fri, 7AM-6PM ET",
+      "person_titles": [
+        "General Counsel",
+        "Chief Legal Officer",
+        "Deputy General Counsel",
+        "VP Legal",
+        "Vice President Legal",
+        "VP of Legal",
+        "Vice President of Legal",
+        "VP of Litigation",
+        "Vice President of Litigation",
+        "VP Legal Operations",
+        "Vice President Legal Operations",
+        "Director of Legal Operations"
+      ],
+      "person_locations": ["United States"],
+      "contact_email_status": ["verified"]
+    },
+    "campaign_2_cro_vp_risk": {
+      "name": "Campaign 2 - CRO / VP Risk Outreach",
+      "sequence_id": null,
+      "mailbox_id": "69a598bdfd80760021e01e93",
+      "sender": "Sarah Johnson <sarahjohnson@trycaseglide.com>",
+      "status": "not_built",
+      "launched": null,
+      "contacts_loaded": 0,
+      "steps": 5,
+      "cadence_days": [1, 3, 6, 9, 14],
+      "schedule": "Mon-Fri, 7AM-6PM ET",
+      "person_titles": [
+        "Chief Risk Officer",
+        "VP Risk",
+        "Vice President Risk",
+        "VP of Risk Management",
+        "Vice President of Risk Management",
+        "VP of Risk",
+        "Vice President of Risk",
+        "VP Claims",
+        "Vice President of Claims",
+        "Chief Claims Officer",
+        "Chief Information Officer",
+        "Vice President of Information Technology"
+      ],
+      "person_locations": ["United States"],
+      "contact_email_status": ["verified"]
+    }
+  },
+  "defaults": {
+    "batch_size": 100,
+    "hourly_call_limit": 350,
+    "search_sleep_seconds": 0.25,
+    "add_batch_sleep_seconds": 1.0,
+    "rate_limit_initial_backoff_seconds": 60,
+    "rate_limit_max_retries": 5
+  }
+}

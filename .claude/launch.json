@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "litigation-sentinel",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "cd caseglide-platform && npm run dev"],
+      "port": 3000
+    }
+  ]
+}
