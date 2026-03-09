@@ -1,0 +1,2 @@
+2026-03-09 07:41 EDT — Campaign Monitor (morning run): All clear — no new replies or bounces in last 6h. sarahjohnson@trycaseglide.com inbox checked. Last known activity: George Pavarini thread (Mar 6), Elizabeth Connolly thread (Mar 4).
+2026-03-09 12:00 EDT — Campaign Monitor: 746 delivered, 27.9% open, 2 replies, 1.7% bounce. Beehiiv: 9 subscribers. NOTE: Apollo reply count up from 1 → 2 since morning — possible new reply in sarahjohnson@ inbox. Bounce rate 1.7% (under 5% threshold). No noon scan available.
