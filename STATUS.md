@@ -1,5 +1,5 @@
 # STATUS.md — CaseGlide Pipeline State
-*Updated: 2026-03-07 (Session 12 FINAL) | Campaign 2 BUILT + 3,735 contacts LOADED | Subscribe flow TESTED | Pacific Specialty demo invite DRAFTED | Resend DNS VERIFIED | Intent to Bid due Wed Mar 11 | Campaign 1 LIVE*
+*Updated: 2026-03-09 (Session 13) | Intent to Bid email DRAFTED (due TODAY Mar 9) | Campaign 1 Day 8: 746 delivered, 27.9% open | Campaign 2: 3,735 loaded, awaiting activation | Eaton meeting notes READY | All subagent deliverables COMPLETE*
 
 ---
 
@@ -22,10 +22,10 @@
 
 ---
 
-### 2. Hiscox — INTENT TO BID DUE WED MAR 11
+### 2. Hiscox — INTENT TO BID DUE TODAY MAR 9
 **Stage:** RFP Response In Progress
 **Contact:** Sroop Grewal (procurement organizer) | sroop.grewal@hiscox.com
-**Last Action:** All-hands call attended Mar 6. RFP docs received and reviewed. Full response drafted.
+**Last Action:** Intent to Bid email DRAFTED Mar 9. NDA eSigned Mar 6. Date correction: RFP says ITB due Mar 9 (not Mar 11).
 **Known Constraints:** No DUNS, no FSQS, not insured by Hiscox — SOC 2 Type II is primary cert
 **Open Items:**
 - [x] Portal submission confirmed
@@ -36,34 +36,37 @@
 - [x] 15 narrative responses written (Q1-Q15)
 - [x] 47 requirements responded to (44 Fully, 2 Partially, 1 Alternative)
 - [x] NAIC AI Evaluation Form completed (4 models)
-- [ ] **INTENT TO BID — DUE WEDNESDAY MARCH 11** — submit via portal
+- [x] NDA eSigned Mar 6 (confirmed in Gmail)
+- [x] Intent to Bid email DRAFTED — CaseGlide 2026/tasks/hiscox-intent-to-bid-email.md
+- [ ] **WES: Send Intent to Bid email to sroop.grewal@hiscox.com — DUE TODAY**
+- [ ] **WES: Log into iValua portal + confirm ITB (CAPTCHA required)**
 - [ ] Wes to review response draft + answer 14 questions (pricing, references, legal)
 - [ ] Pricing Book (P1-P5 + day rates) — Wes input required
 - [ ] Reference customers — confirm FIGA + PURE willingness
 - [ ] MSA + SOW legal review — Wes must review as attorney
-- [ ] FSQS registration decision
-- [ ] Draft ethics/BCP/H&S policy docs if needed
 - [ ] Transfer answers to Excel response pack template
-- [ ] Final submission (deadline TBD — check with Sroop)
-**Next Action:** Submit Intent to Bid by Wed Mar 11. Wes to review draft + answer questions.
-**Owner:** Wes (review + pricing + legal), COS (finalization)
+- [ ] Final submission deadline: **March 31**
+**Next Action:** Wes sends Intent to Bid email TODAY + portal confirmation. Full RFP response due Mar 31.
+**Owner:** Wes (ITB today + pricing + legal), COS (finalization)
 
 ---
 
-### 3. Eaton Corporation — MONDAY
+### 3. Eaton Corporation — TODAY 11 AM
 **Stage:** Trial Introduction
 **Contacts:** Charlie Price (Senior Litigation Manager), Jennifer Greene (DeHay & Elliston, LLP)
-**Last Action:** All trial intro materials prepared Mar 5.
+**Last Action:** Meeting notes updated Mar 9. Liana flagged platform bug — trial start pushed 1 week.
 **Open Items:**
 - [x] 10-case demo delivered
 - [x] Prep doc: tasks/eaton-trial-prep-mar9.md
 - [x] Demo script prepared: Eaton_Trial_Demo_Script_Mar9.docx
 - [x] Demo presentation prepared: Eaton_Trial_Demo_Presentation_Mar9.pdf
 - [x] Trial packet prepared: Eaton_Trial_Packet_Mar2026.pdf
-- [ ] Wes to review all 3 deliverables by 3/7
-- [ ] Confirm Liana attendance (calendar shows her, prep doc says Wes only)
-**Next Action:** Trial intro meeting **Monday March 9 @ 11am**. Wes review materials by Friday.
-**Owner:** Wes (review + call)
+- [x] Liana confirmed attending + updated slides with corrected dates
+- [x] Meeting notes updated for 1-week delay: tasks/eaton-meeting-notes-mar9.md
+- [ ] **Meeting TODAY 11 AM** — orientation call, trial starts week of Mar 24 (was Mar 17)
+- [ ] Post-call: Liana sends activation details, confirm Mar 24 kick-off
+**Next Action:** Trial intro meeting **Monday March 9 @ 11am**. Trial start pushed to week of Mar 24 due to platform bug.
+**Owner:** Wes (call) + Liana (onboarding)
 
 ---
 
@@ -113,9 +116,9 @@
 **Click Tracking:** DISABLED Mar 5 (enterprise firewalls blocked tracking redirects)
 **Sequence:** Campaign 1 - GC / CLO Cold Outreach (5 steps, Day 1/3/6/9/14)
 **Contacts:** 7,641 active
-**Metrics (as of Mar 6 — live API pull):** 575 delivered | 23.3% open | 21.4% click (inflated by bots) | 0.2% reply | 1.2% bounce (7)
-**Full Funnel (Mar 6):**
-- Beehiiv subscribers: 6
+**Metrics (as of Mar 9 — live API pull):** 746 delivered | 27.9% open | 24.1% click (inflated by bots) | 0.3% reply (2 Apollo / 4+ actual) | 1.7% bounce (13)
+**Full Funnel (Mar 9):**
+- Beehiiv subscribers: 9
 - Executive Briefing submissions: 0
 - CaseGlide.com submissions: 0
 - (Vercel Web Analytics for visitor data — check dashboard)
@@ -135,7 +138,7 @@
 - [x] Campaign 2 BUILT in Apollo Mar 6 (sequence ID: 69ab6d24c5f76f000d3141f3). 5 steps, all new threads, click tracking OFF.
 - [x] Campaign 2 contacts LOADED Mar 7: 3,735 added / 162 skipped / 0 errors of 3,897 total
 - [x] Peter Max Zimmerman REMOVED from all sequences (deceased contact)
-- [ ] Campaign 2: Activate via UI — target Mar 17
+- [ ] **Campaign 2: Activate via UI — Wes decision pending (recommend NOW, was target Mar 17)**
 - [ ] Deploy 400-500 new contacts/week starting Week 3 (~Mar 16)
 **Process Doc:** `.claude/memory/apollo-campaigns.md`
 **Script:** `scripts/apollo_campaign_manager.py`, `scripts/daily_campaign_digest.py`
@@ -203,25 +206,31 @@
 ---
 
 ## Last Session
-**Date:** 2026-03-07 (Session 12 FINAL — Campaign 2 Build Complete)
+**Date:** 2026-03-09 (Session 13 — Monday Morning Brief + Execution)
 **Actions:**
-- **Campaign 2 BUILT in Apollo** — 5-step sequence (Day 1/4/7/10/14), all new threads, click tracking OFF. Sequence ID: 69ab6d24c5f76f000d3141f3.
-- **3,735 contacts LOADED** into Campaign 2 (162 skipped, 0 errors). CRO/VP Risk/VP Claims/CCO titles, US, verified email.
-- **Peter Max Zimmerman REMOVED** from all Apollo sequences (deceased contact).
-- **Subscribe flow TESTED end-to-end** — PASS. Beehiiv subscribe, track events, localStorage persistence all working on production.
-- **Pacific Specialty demo invite DRAFTED** — saved to tasks/pacific-specialty-demo-invite.md. Ready for Wes to send Mar 10.
-- **Resend DNS VERIFIED** — DKIM + SPF propagated and verified. Domain ready.
-- **APOLLO_SEQUENCES_DRAFT.md updated** with Campaign 2 sequence ID.
+- **Full session start scan** — Outlook email, calendar, Teams, sarahjohnson@ Gmail all checked.
+- **Liana Rodriguez Teams message** — Platform bug blocks Eaton access. Trial start pushed 1 week (now week of Mar 24). Meeting today still happening. Liana updated slides. Wes confirmed on Teams.
+- **Hiscox Intent to Bid DATE CORRECTION** — RFP says due Mar 9 (TODAY), not Mar 11. Email draft created at CaseGlide 2026/tasks/hiscox-intent-to-bid-email.md. Portal requires CAPTCHA (Wes must submit).
+- **Campaign 1 Week 2 metrics pulled** — 746 delivered, 27.9% open, 1.7% bounce, 9 Beehiiv subscribers. Healthy.
+- **Campaign 2 confirmed ready** — 3,735 contacts loaded (paused), 5 steps, awaiting UI activation. Wes decision pending.
+- **Eaton meeting notes updated** — tasks/eaton-meeting-notes-mar9.md with delay framing.
+- **SageSure demo follow-up drafted** — tasks/sagesure-demo-followup-draft.md. Missing Desiree Ingram email.
+- **LinkedIn Post #1 finalized** — tasks/linkedin-post-1-final.md. Ready for Mar 10.
+- **George Pavarini reply confirmed SENT** — Wes sent Mar 6 7:13 PM from sarahjohnson@. No response yet (weekend).
+- **FileForms flagged** — CaseGlide FL Annual Report due May 1, $400 late fee.
+- **Hiscox NDA eSigned** — Confirmed in Gmail Mar 6.
 **Pending:**
-- **INTENT TO BID — DUE WED MAR 11** — highest priority
-- **Wes to review Hiscox response draft** — answer 14 questions (pricing + references + legal)
-- **Send George Pavarini reply** — Draft at tasks/pavarini-reply-draft.md. Wes to send from wesley@caseglide.com.
-- **Eaton trial intro Mon 3/9 @ 11am** — materials ready
-- **Send Pacific Specialty demo invite Mar 10** — Draft at tasks/pacific-specialty-demo-invite.md
-- **LinkedIn Post #1 Mar 10**
-- Campaign 2: Activate via UI — target Mar 17
-- Schedule SageSure demo (week of March 16 or 23)
-- Monitor Elizabeth Connolly for response (reply sent Mar 6, next touch Mar 13)
+- **WES: Send Hiscox Intent to Bid email to Sroop — DUE TODAY**
+- **WES: Confirm ITB on iValua portal (CAPTCHA) — DUE TODAY**
+- **WES: Decide on Campaign 2 activation (recommend NOW)**
+- **WES: Eaton meeting 11 AM today** — notes ready
+- **WES: Send Pacific Specialty demo invite Mar 10** — Draft ready
+- **WES: LinkedIn Post #1 Mar 10** — Copy ready
+- **WES: Pull Desiree Ingram email for SageSure follow-up**
+- Monitor George Pavarini for response (expect today/tomorrow)
+- Monitor Elizabeth Connolly (next touch Mar 13 if silent)
+- Hartford second touch Mar 11 if still silent
 - EY regroup prep (3/25 deadline — start week of 3/16)
+- Campaign 2: Activate when Wes approves
+- Deploy 400-500 new contacts/week to Campaign 1 starting ~Mar 16
 - Newsletter first issue (~2 weeks out)
-- Re-add Resend notification send (package removed, DNS now verified)

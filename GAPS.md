@@ -22,7 +22,8 @@
 | 16 | ~~Notification system not deployed~~ | ~~Subscribe notifications + track-event route built but not on production~~ | RESOLVED Mar 4 — notification system was already deployed in commit bea9801 ("Add notification system"). Redeployed with correct Beehiiv key. | NO |
 | 17 | Newsletter first email issue | First Litigation Sentinel email needed in ~2 weeks | NOT STARTED — marketing-agent to draft content | NO |
 | 18 | ~~Resend DNS records for litigationsentinel.com~~ | ~~Notification emails sending from onboarding@resend.dev~~ | RESOLVED Mar 6 — DKIM + SPF verified, domain fully propagated. Resend package not installed in codebase (was removed during email flood fix). Re-add Resend send call when needed. | NO |
-| 20 | **Hiscox Intent to Bid — DUE WED MAR 11** | Must submit intent to bid or lose RFP opportunity | Draft response complete, Wes must submit intent via iValua portal or email Sroop Grewal | **YES — DEADLINE** |
+| 20 | **Hiscox Intent to Bid — DUE TODAY MAR 9** | Must submit intent to bid or lose RFP opportunity. RFP Section 3.1 says Mar 9, NOT Mar 11. | Email draft READY at CaseGlide 2026/tasks/hiscox-intent-to-bid-email.md. Portal requires CAPTCHA (Wes must log in). | **YES — DUE TODAY** |
+| 25 | FileForms: CaseGlide FL Annual Report due May 1 | $400 late fee if missed. Email flagged Mar 9. | NOT STARTED — calendar reminder needed | NO |
 | 21 | Hiscox RFP pricing | Cannot submit final response without pricing (P1-P5 + day rates) | Wes must provide pricing inputs — see Hiscox_RFP_Questions_for_Wes.md | YES |
 | 22 | Hiscox reference customers | RFP requires 2 reference customers willing to do calls | Recommend FIGA + PURE — Wes must confirm willingness | NO |
 | 23 | Hiscox MSA/SOW legal review | MSA template with AI clauses requires attorney review | Wes must review as CEO/attorney — docs in Hiscox RFP Docs folder | NO |
