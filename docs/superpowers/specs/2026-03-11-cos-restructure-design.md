@@ -21,7 +21,7 @@ Result: 0 Executive Briefings scheduled, 9 newsletter subscribers vs 100 target,
 
 1. **API-first by default.** Every scheduled task must execute without a browser. Browser is fallback only for actions with no API equivalent.
 2. **Template-locked execution.** Wes approves templates and topics once. COS executes indefinitely within those guardrails. No per-piece content approval.
-3. **Batch async approval.** When COS needs Wes, it batches into a single daily iMessage: decisions only, binary, no context required.
+3. **Batch async approval.** When COS needs Wes, it batches into a single daily email: decisions only, binary, no context required. Wes replies Y/N. COS reads reply via Microsoft 365 MCP.
 4. **Outcome accountability.** Subagents own metrics, not task lists. COS redesigns any approach that misses its number.
 
 ---
@@ -31,18 +31,36 @@ Result: 0 Executive Briefings scheduled, 9 newsletter subscribers vs 100 target,
 ### Session Flow (Redesigned)
 
 **Old:** Scan email + calendar + Teams + 6 state files → delegate → produce morning brief → wait for Wes
-**New:** Read single digest file → run diagnosis → execute autonomous list → iMessage Wes with 0-3 binary decisions
+**New:** Read single digest file → run diagnosis → execute autonomous list → email Wes with 0-3 binary decisions
 
 ### Wes's Required Involvement
 
 | Action | Current | Target |
 |--------|---------|--------|
 | LinkedIn post approval | Every post | Never (template-locked) |
-| Apollo list approval | Manual | One iMessage reply per batch |
+| Apollo list approval | Manual | One email reply per batch |
 | Newsletter approval | Every send | Never (template-locked) |
 | Deal follow-up drafts | Review each | Only if deal >$50K or unusual |
-| Campaign activation | UI login required | One iMessage reply |
+| Campaign activation | UI login required | One email reply |
 | Daily time required | 1-3 hours | ≤1 hour |
+
+### Approval Loop — Email via Microsoft 365 MCP
+
+When COS needs a decision:
+1. Composes email to wesley@caseglide.com with subject `[COS APPROVAL NEEDED] {date}`
+2. Body lists numbered decisions: `1. Load 412 GC/CLO contacts into Campaign 1? (Y/N)`
+3. For deal follow-up approvals, the full draft is included below the decision line: `1. Send follow-up to Jason Winnell (Hartford)? (Y/N)\n---\n[draft email body]`
+4. Wes replies with decision codes: `1Y`, `2N 3Y`, etc.
+5. Next scheduled task reads reply via `mcp__claude_ai_Microsoft_365__outlook_email_search`, searching for most recent email with subject containing `[COS APPROVAL NEEDED]`, parses codes from reply body
+6. Timeout: 24 hours — unanswered items are skipped and flagged in next digest
+
+**Reply parsing rules:**
+- Match pattern `[0-9]+[YyNn]` in reply body, ignore everything else
+- Partial reply (e.g., Wes replies `1Y` when 3 decisions were sent): only item 1 executes, items 2-3 skip and re-queue for next digest
+- Malformed reply (no parseable codes found): all items skip, all flagged in next digest
+- Multiple matching threads: use most recent email only
+
+**Dependency:** Microsoft 365 MCP email send/receive must be validated end-to-end before this loop is trusted. Until validated, COS writes decisions to `tasks/pending-approvals.md` as fallback.
 
 ---
 
@@ -53,21 +71,28 @@ Result: 0 Executive Briefings scheduled, 9 newsletter subscribers vs 100 target,
 **Current state:** Wes drafts, approves, and manually posts. Calendar exists but depends on Wes remembering.
 
 **New model:**
-- Template library of 6-8 approved post formats stored in `.claude/templates/linkedin/`
-- COS generates posts by pulling real data into templates (Apollo metrics, Litigation Sentinel stats, published articles, nuclear verdict cases)
-- Posts scheduled via Buffer API (or equivalent LinkedIn scheduling tool)
-- Cadence: 3 posts/week, no Wes involvement
-- Wes receives weekly performance summary only (impressions, clicks, profile views)
+- Template library: 6 markdown files in `.claude/templates/linkedin/`
+- Posts scheduled via **Buffer API** (decision: Buffer over native LinkedIn API — simpler OAuth, supports scheduling)
+- Cadence: Mon/Wed/Fri 7:30 AM, no Wes involvement
+- Wes receives weekly performance summary via email only
 
-**Template formats (to be approved by Wes):**
-1. Data-point post — one nuclear verdict stat + question
-2. Article teaser — link to Litigation Sentinel article + 2-sentence hook
-3. Client outcome — anonymized result from approved proof points
-4. Industry observation — trend in litigation + CaseGlide angle
-5. Nuclear verdict case study — one case, verdict size, what it means
-6. Myth/misconception — common belief about litigation + counter-data
+**Template rotation:** Sequential, cycling 1-6. State tracked in `tasks/linkedin-state.md` (fields: `last_template_index`, `used_verdict_ids[]`).
 
-**Approval gate:** Wes approves the 6 template formats once. COS generates and posts forever within those formats.
+**Variable sources:**
+- `{{verdict_amount}}`, `{{state}}`, `{{case_name}}`: random entry from `caseglide-platform/src/data/nuclear-verdicts.ts` not in `used_verdict_ids` (last 30 days)
+- `{{article_url}}`, `{{article_title}}`, `{{article_hook}}`: first entry in `caseglide-platform/src/data/newsletter-articles.ts` array (most recently added). `{{article_hook}}` = first paragraph of first content block.
+- `{{proof_point}}`: hardcoded rotation in template file (25% defense spend / 10% settlement / 25% litigation volume)
+- Apollo campaign metrics: `GET /v1/emailer_campaigns/{campaign_id}` at post time
+
+**Templates (6 files, Wes approves once):**
+1. `data-point.md` — `{{verdict_amount}}` verdict in `{{state}}` + question
+2. `article-teaser.md` — `{{article_hook}}` + `{{article_url}}`
+3. `client-outcome.md` — `{{proof_point}}` proof point + CaseGlide attribution
+4. `industry-observation.md` — static text (Wes writes once), litigation trend + CaseGlide angle
+5. `verdict-case-study.md` — `{{case_name}}`, `{{verdict_amount}}`, `{{state}}`, implications
+6. `myth-misconception.md` — static text (Wes writes once), common belief + counter-data
+
+**Approval gate:** Wes approves the 6 template files once. Structure is fixed; only variables change.
 
 ---
 
@@ -75,43 +100,74 @@ Result: 0 Executive Briefings scheduled, 9 newsletter subscribers vs 100 target,
 
 **Current state:** COS reports on campaign metrics. List building is manual or semi-manual. Campaign activation requires UI login.
 
-**New model:**
+**Apollo API capability confirmation:** Existing `scripts/apollo_campaign_manager.py` and `.claude/rules/apollo-operations.md` confirm the API supports: `contacts/search` (paginated, 300 req/min), `emailer_campaigns/{id}/add_contact_ids` (batches of 100), and sequence management. All Channel 2 operations are API-supported.
 
-**Weekly list build (every Friday, autonomous):**
-1. `marketing-agent` pulls from Apollo saved searches using pre-approved criteria:
-   - Titles: GC, CLO, VP Claims, CRO, VP Risk, CCO, VP Legal, Litigation Manager
-   - Industries: Insurance, Financial Services, Healthcare (large self-insured)
-   - Company size: 500+ employees
-   - Email: verified only
-   - Exclusions: existing CRM contacts, bounced contacts, deceased contacts
-2. Deduplicates against all existing sequences
-3. Segments by campaign match (Campaign 1 vs Campaign 2 criteria)
-4. iMessages Wes: *"Weekly list ready: 412 GC/CLO for Campaign 1, 287 CRO/VP Risk for Campaign 2. Reply Y to load both."*
-5. On Y reply: loads contacts via API, activates if sequence is paused, confirms via iMessage
+**Weekly list build (every Friday 10 AM, autonomous):**
+1. `marketing-agent` queries Apollo `contacts/search` using pre-approved criteria from `campaign-criteria.md` (see schema below)
+2. Dedup key: **email address**. For each result, check existence via `contacts/search?q_keywords={email}&page=1` against Apollo CRM (Apollo IS the CRM — no cross-system check needed). Skip contacts already found in CRM.
+3. Additionally exclude: contacts already in any active sequence (checked via `emailer_campaigns/{id}/contact_ids`), bounced contacts (email_status = bounced)
+4. Segment results into Campaign 1 batch (GC/CLO/VP Legal/Litigation Manager titles) and Campaign 2 batch (CRO/VP Risk/VP Claims/CCO titles)
+5. Email Wes approval request: `1. Load 412 GC/CLO into Campaign 1? (Y/N)  2. Load 287 CRO/VP Risk into Campaign 2? (Y/N)`
+6. On Y reply: runs `apollo_campaign_manager.py add-contacts` for approved batches, confirms via follow-up email
 
-**No Wes login required at any step.**
+**Rate limit compliance:** 400 API calls/hour for sequence adds, 0.2s sleep between contact search pages, exponential backoff on 429.
 
-**Approval criteria pre-approved:** Wes approves the targeting criteria once in a `campaign-criteria.md` file. COS applies them forever.
+**`campaign-criteria.md` schema** (file must exist before task can run — see Dependencies):
+```yaml
+campaign_1:
+  titles: ["General Counsel", "CLO", "VP Legal", "Litigation Manager", "Deputy GC"]
+  industries: ["Insurance", "Financial Services", "Healthcare"]
+  min_employees: 500
+  email_status: verified
+  excluded_titles: []
+
+campaign_2:
+  titles: ["CRO", "VP Risk", "VP Claims", "CCO", "Chief Risk Officer", "Chief Claims Officer"]
+  industries: ["Insurance", "Financial Services", "Healthcare"]
+  min_employees: 500
+  email_status: verified
+  excluded_titles: []
+```
 
 ---
 
-### Channel 3: Newsletter — Multi-List Distribution
+### Channel 3: Newsletter — Beehiiv + Apollo Distribution
 
-**Current state:** Beehiiv only, 9 subscribers. No distribution to Apollo/HubSpot lists.
+**Current state:** Beehiiv only, 9 subscribers. No distribution to other lists.
+
+**HubSpot status:** Pre-2025 database, needs one-time audit before any contacts are usable. Not in active distribution until audit complete (see Legacy List Audit below).
 
 **New model:**
-- Cadence: every 2 weeks, fully autonomous
-- Content: generated from approved 3-part format:
-  1. One data point or nuclear verdict case (pulled from Litigation Sentinel content)
-  2. Link to most recent article published on LitigationSentinel.com
-  3. Soft CTA (subscribe to newsletter, or book Executive Briefing)
-- Distribution:
-  - Beehiiv: direct send to subscribers via API
-  - Apollo contacts: loaded into a dedicated "Newsletter" sequence in Apollo (separate from Campaign 1/2), template-locked, automated sends
-  - HubSpot: send via HubSpot email API to contact list (requires HubSpot setup — see dependencies)
-- Deliverability: Apollo sends go through Sarah Johnson persona with existing warm domain. HubSpot sends go through wesley@caseglide.com. No cold blast outside approved sending infrastructure.
+- Cadence: every 2 weeks Tuesday 9 AM, fully autonomous
+- Content generated from approved 3-part template (`newsletter-template.md`):
+  - Variable `{{data_point}}`: one nuclear verdict stat or case pulled from `/src/data/`
+  - Variable `{{article_url}}` + `{{article_title}}`: most recent article on LitigationSentinel.com
+  - Fixed CTA: "Subscribe to Litigation Sentinel" + "Book Executive Briefing"
+- Distribution (two separate systems — no contact crossover):
+  - **Beehiiv:** send to existing Beehiiv subscriber list via `POST /v1/publications/{id}/broadcasts` (Beehiiv API, existing key). Beehiiv manages its own subscriber list — no contact push needed.
+  - **Apollo:** send to Apollo CRM contacts NOT already enrolled in Campaign 1 or Campaign 2 sequences. COS loads eligible contacts into a dedicated Apollo "Newsletter" sequence (to be created, separate from Campaign 1/2 sequences). Sends via Sarah Johnson persona (mailbox ID: 69a598bdfd80760021e01e93). Apollo sequences handle send timing autonomously once contacts are loaded.
+- These are independent distribution paths. A contact can be in both Beehiiv (as subscriber) and Apollo (as newsletter sequence contact) without conflict.
+- Deliverability: Apollo sends use existing warm trycaseglide.com domain. All sends within approved infrastructure.
 
-**Approval gate:** Wes approves the 3-part newsletter format once. COS generates and distributes on cadence.
+**Approval gate:** Wes approves `newsletter-template.md` once. COS fills variables and distributes on cadence.
+
+---
+
+### Channel 4: Legacy List Audit (One-Time)
+
+**Sources:**
+1. **HubSpot** — pre-2025 sales database. Unknown contact quality. Requires: export all contacts, filter by title match (same criteria as Campaign 1/2), check for email validity, dedup against Apollo CRM.
+2. **Desktop spreadsheets** — handcrafted lists on Wes's Desktop. Requires: scan `~/Desktop` for `.csv`, `.xlsx` files, inspect headers for name/email/title/company columns, extract matching contacts, validate emails.
+
+**Process (one session, delegated to marketing-agent):**
+1. Export HubSpot contacts via HubSpot API or CSV export
+2. Scan Desktop for spreadsheet files
+3. For each source: filter by title + company size criteria, validate email format, dedup against Apollo CRM
+4. Produce audit report: `tasks/legacy-list-audit.md` with counts per source and sample contacts
+5. Email Wes: "Found X qualified contacts across HubSpot + Y spreadsheets. Load into Apollo? (Y/N)"
+6. On Y: load approved contacts into Apollo CRM, add to appropriate campaign sequence
+
+**This is a one-time task, not recurring.**
 
 ---
 
@@ -125,12 +181,13 @@ Result: 0 Executive Briefings scheduled, 9 newsletter subscribers vs 100 target,
 - Newsletter sends executed per cadence (target: 1 per 2 weeks)
 
 **New responsibilities:**
-- Weekly autonomous list build (Friday)
-- LinkedIn post generation + Buffer scheduling
-- Newsletter content generation + multi-list distribution
-- Campaign performance reporting (metrics only — escalates only if bounce rate >5% or sequence failing)
+- Weekly autonomous list build (Friday) via Apollo API
+- LinkedIn post generation from template variables + Buffer API scheduling
+- Newsletter content generation + Beehiiv + Apollo distribution
+- Legacy list audit (one-time)
+- Campaign performance reporting (escalates only if bounce rate >5% or open rate drops >20% week-over-week)
 
-**Removed:** Any task that requires Chrome. Any task that produces a report but takes no action.
+**Removed:** Any task requiring Chrome. Any task producing a report without taking action.
 
 ---
 
@@ -140,8 +197,9 @@ Result: 0 Executive Briefings scheduled, 9 newsletter subscribers vs 100 target,
 - Days-since-last-touch on every active deal (target: never >3 days)
 
 **New behavior:**
-- Monitors all active deals daily via Pipedrive API
-- If any deal exceeds 3 days since last touch: drafts follow-up, updates Pipedrive, iMessages Wes with draft for send approval (one reply: Y to send)
+- Monitors active deals daily via Pipedrive API (`GET /v1/deals?status=open`)
+- Last-touch timestamp tracked via Pipedrive activity log (`GET /v1/deals/{id}/activities`)
+- If any deal exceeds 3 days since last logged activity: drafts follow-up email, updates Pipedrive activity log, emails Wes draft for send approval
 - Does not wait to be asked. Does not produce a report. Acts.
 
 **Removed:** Waiting for Wes to notice deals going dark.
@@ -152,13 +210,32 @@ Result: 0 Executive Briefings scheduled, 9 newsletter subscribers vs 100 target,
 
 **Owns:** Platform uptime + deploy success rate
 
-**Trigger:** Runs on demand only — when marketing-agent needs an article published, or COS flags a platform issue. Not on a schedule.
+**Trigger:** On demand only — invoked by marketing-agent when article needs publishing, or by COS when platform issue flagged. Not scheduled.
 
 ---
 
 ### COS (Circuit Breaker Role)
 
-**Session start:** Read single `tasks/daily-digest.md` (written by scheduled tasks) → run diagnosis → act
+**Session start:** Read `tasks/daily-digest.md` → run diagnosis → act
+
+**`daily-digest.md` schema** (written by `morning-ops-brief` scheduled task):
+```
+## Date: YYYY-MM-DD
+## Campaign Metrics
+- Apollo Campaign 1: X delivered, X% open, X% bounce
+- Apollo Campaign 2: X delivered, X% open, X% bounce
+- Beehiiv subscribers: X
+
+## Deal Status
+- [Deal name]: last touch [date], [X] days ago, stage: [stage]
+- ...
+
+## Pending Approvals
+- [Any Y/N decisions awaiting reply]
+
+## Flags
+- [Any metric exceeding threshold — bounce >5%, deal >3 days, open rate drop >20%]
+```
 
 **Escalates to Wes only when:**
 - A metric is red (subagent missed its number 2 weeks in a row)
@@ -174,36 +251,39 @@ Result: 0 Executive Briefings scheduled, 9 newsletter subscribers vs 100 target,
 ### Tasks to Kill
 | Task | Reason |
 |------|--------|
-| `noon-chrome-scan` (current) | Browser-dependent, replaced by API equivalents |
-| Any task that writes a report but takes no action | Not an outcome |
+| `noon-chrome-scan` | Browser-dependent, replaced by API equivalents |
+| `platform-health-check` | Rolled into `morning-ops-brief` API check |
+| `state-file-integrity` | Replaced by outcome-based metrics in digest |
 
 ### Tasks to Rebuild
 | Task | New Behavior |
 |------|-------------|
-| `morning-ops-brief` | Reads API data (Apollo, Beehiiv, Pipedrive), writes `tasks/daily-digest.md`, iMessages Wes with 0-3 binary decisions |
-| `campaign-monitor` | Apollo API + Beehiiv API. Escalates only if bounce >5% or open rate drops >20% week-over-week |
-| `deal-pipeline-watchdog` | Pipedrive API. Acts (drafts follow-up) if deal >3 days no touch. Doesn't report. |
+| `morning-ops-brief` | Reads Apollo API + Beehiiv API + Pipedrive API. Writes `tasks/daily-digest.md`. Emails Wes 0-3 binary decisions if any pending. |
+| `campaign-monitor` | Apollo API + Beehiiv API metrics only. Escalates to Wes if bounce >5% or open rate drops >20% WoW. Otherwise silent. |
+| `deal-pipeline-watchdog` | Pipedrive API. Drafts follow-up + emails Wes for send approval if any deal >3 days since last activity. |
 
 ### New Tasks
 | Task | Schedule | Behavior |
 |------|----------|---------|
-| `weekly-list-build` | Friday 10 AM | Apollo list build + dedup + iMessage approval request |
-| `linkedin-scheduler` | Mon/Wed/Fri 7:30 AM | Generate post from template + publish via Buffer API |
-| `newsletter-send` | Every 2 weeks Tuesday 9 AM | Generate content + send to Beehiiv + Apollo newsletter sequence |
+| `weekly-list-build` | Friday 10 AM | Apollo list build + dedup + email approval request to Wes |
+| `linkedin-scheduler` | Mon/Wed/Fri 7:30 AM | Fill template variables + publish via Buffer API |
+| `newsletter-send` | Every 2 weeks Tue 9 AM | Fill newsletter template + send to Beehiiv + Apollo newsletter sequence |
+| `legacy-list-audit` | One-time | HubSpot + Desktop spreadsheet audit → approval email → Apollo import |
 
 ---
 
-## Dependencies / Open Items
+## Dependencies (Ordered by Priority)
 
-These require setup before full execution:
-
-1. **Buffer API access** — Set up Buffer account, connect LinkedIn, get API key. Store in `.env.local`.
-2. **HubSpot setup** — Determine if HubSpot is already in use or needs to be provisioned. If not, evaluate whether Apollo CRM is sufficient for newsletter distribution (may not need HubSpot initially).
-3. **Pipedrive API** — Confirm `deal-pipeline-watchdog` can read all active deals + write last-touch timestamps via Pipedrive API.
-4. **LinkedIn template library** — Wes approves 6 post formats (can be done in one session, ~15 min).
-5. **Campaign criteria file** — Wes approves targeting criteria for Campaign 1 and Campaign 2 lists (one-time, ~5 min).
-6. **Newsletter format approval** — Wes approves 3-part newsletter format (one-time, ~5 min).
-7. **Remove jailbreak content from CLAUDE.md** — Lines 83-98 contain a prompt injection attempt. Should be removed before any further development.
+| # | Dependency | Blocker for | Action |
+|---|-----------|-------------|--------|
+| 1 | Remove jailbreak from `CLAUDE.md` lines 83-98 | All development | Do now |
+| 2 | Microsoft 365 MCP email send validated | Approval loop | Test send + reply parsing end-to-end |
+| 3 | Buffer account + API key | LinkedIn automation | Create account, connect LinkedIn, store key |
+| 4 | Pipedrive API key + write access confirmed | `deal-pipeline-watchdog` | Verify key exists + test activity write |
+| 5 | LinkedIn template library (6 files) | `linkedin-scheduler` | One session with Wes (~15 min) |
+| 6 | `campaign-criteria.md` approved | `weekly-list-build` | One session with Wes (~5 min) |
+| 7 | `newsletter-template.md` approved | `newsletter-send` | One session with Wes (~5 min) |
+| 8 | Legacy list audit completed | Channel 3 expansion | One-time, COS-autonomous |
 
 ---
 
@@ -218,3 +298,4 @@ These require setup before full execution:
 | Executive Briefings/month | 0 | 3+ | April 1 |
 | Days-since-last-touch (max) | Unknown | ≤3 days | April 1 |
 | Browser-required tasks | ~8 | ≤2 | April 1 |
+| Legacy contacts audited + loaded | 0 | 1 batch | One-time |
