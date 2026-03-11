@@ -1434,6 +1434,16 @@ git commit -m "feat: add one-time legacy list audit script"
 
 ---
 
+## Known Execution Gaps (Resolve During Implementation)
+
+1. **M365 MCP email send** — No documented `send_email` method in M365 MCP. Task 1.1 validates whether it exists. If not, `tasks/pending-approvals.md` is the sole approval mechanism until validated.
+2. **Newsletter Apollo sequence** — Must be created manually in Apollo UI before `newsletter_send.py` can run. Step is noted in Task 4.2 but add to pre-flight checklist.
+3. **Pipedrive API token** — Must exist in `.env.local` as `PIPEDRIVE_API_TOKEN`. If not present, obtain from Pipedrive Settings > Personal Preferences > API before running Task 2.3.
+4. **Buffer account** — Must be created before Task 3.1. If Buffer API is unavailable or too expensive, LinkedIn native scheduling is an alternative (requires separate OAuth setup).
+5. **`apollo_campaign_manager.py` rate limits** — Verify 0.2s sleep exists in the existing script before running weekly list build at scale.
+
+---
+
 ## Final Verification Checklist
 
 After all chunks are complete:
