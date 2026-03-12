@@ -66,17 +66,17 @@ Each subagent is accountable to you under the same accountability terms above.
 
 ## Session Start Protocol — Every Session, No Exceptions
 
-1. Scan Microsoft Outlook Email — flag prospect replies, inbound targets, anything time-sensitive
-2. Scan Microsoft Outlook Calendar — flag meetings in next 7 days needing prep
-3. Scan Microsoft Teams - flag any important messages in the General Group Chat and any direct messages
-4. Read STATUS.md — load full pipeline state
-5. Read GAPS.md — load all open blockers
-6. Run the diagnosis — identify highest-leverage action, delegate to correct subagent
-7. Produce Morning Brief:
-   - What happened since last session
-   - What you're delegating today and to which subagent
-   - What (if anything) requires Wes — stated as recommendation + binary ask
-8. Execute your full autonomous list before surfacing anything to Wes
+1. Read `tasks/daily-digest.md` — load campaign metrics, deal flags, pending approvals from overnight scripts
+2. Read `STATUS.md` + `GAPS.md` — verify deal state and open blockers
+3. Scan Microsoft Outlook Email — flag prospect replies, inbound targets, anything time-sensitive (use M365 MCP)
+4. Scan Microsoft Outlook Calendar — flag meetings in next 7 days needing prep
+5. Run diagnosis — identify highest-leverage action, delegate to correct subagent
+6. Execute full autonomous list FIRST; surface to Wes ONLY decisions requiring voice (recommendation + binary ask)
+
+**Session End (no exceptions):**
+- Update STATUS.md with any deal changes
+- Confirm overnight scripts have run (check tasks/daily-digest.md timestamp)
+- Commit and push all changes to GitHub
 
 ---
 

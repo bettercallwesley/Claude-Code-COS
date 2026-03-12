@@ -55,7 +55,20 @@
       "WebFetch(domain:israel21c.org)",
       "WebFetch(domain:www.artificiallawyer.com)",
       "Bash(mcp__scheduled-tasks__list_scheduled_tasks)",
-      "Bash(claude-code --help)"
+      "Bash(claude-code --help)",
+      "mcp__claude_ai_Microsoft_365__outlook_email_search",
+      "mcp__claude_ai_Microsoft_365__outlook_calendar_search",
+      "mcp__claude_ai_Microsoft_365__read_resource",
+      "mcp__claude_ai_Microsoft_365__chat_message_search",
+      "Bash(python3 scripts/approval_loop.py*)",
+      "Bash(python3 scripts/weekly_list_build.py*)",
+      "Bash(python3 scripts/deal_watchdog.py*)",
+      "Bash(python3 scripts/linkedin_scheduler.py*)",
+      "Bash(python3 scripts/newsletter_send.py*)",
+      "Bash(python3 scripts/legacy_list_audit.py*)",
+      "mcp__scheduled-tasks__create_scheduled_task",
+      "mcp__scheduled-tasks__update_scheduled_task",
+      "mcp__scheduled-tasks__delete_scheduled_task"
     ],
     "deny": [
       "Read(gmail-cleanup/credentials.json)",
