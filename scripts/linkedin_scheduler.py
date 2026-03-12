@@ -49,7 +49,7 @@ PROOF_POINTS = [
     "25% drop in overall litigation volume",
 ]
 
-BUFFER_BASE = "https://api.bufferapp.com/1"
+BUFFER_GRAPHQL = "https://api.buffer.com/graphql"
 
 
 def get_env(key: str) -> Optional[str]:
@@ -249,19 +249,62 @@ def render_template(template_name: str, state: dict, verdict: Optional[Dict], ar
     return text
 
 
-def post_to_buffer(token: str, profile_id: str, text: str) -> dict:
-    """Send post to Buffer queue for LinkedIn."""
-    resp = requests.post(
-        f"{BUFFER_BASE}/updates/create.json",
-        data={
-            "access_token": token,
-            "profile_ids[]": profile_id,
-            "text": text,
-            "scheduled_at": "now",
-        }
-    )
-    resp.raise_for_status()
-    return resp.json()
+def post_to_buffer(token: str, channel_ids: List[str], text: str) -> List[Dict]:
+    """Send post to Buffer queue for LinkedIn channels via GraphQL API.
+
+    Posts to all provided channel IDs (personal + company).
+    Returns list of results per channel.
+    """
+    mutation = """
+    mutation CreatePost($input: CreatePostInput!) {
+      createPost(input: $input) {
+        ... on PostActionSuccess { post { id status } }
+        ... on NotFoundError { message }
+        ... on UnauthorizedError { message }
+        ... on InvalidInputError { message }
+        ... on UnexpectedError { message }
+      }
+    }
+    """
+
+    results = []
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+    }
+
+    for channel_id in channel_ids:
+        resp = requests.post(
+            BUFFER_GRAPHQL,
+            headers=headers,
+            json={
+                "query": mutation,
+                "variables": {
+                    "input": {
+                        "channelId": channel_id,
+                        "text": text,
+                        "schedulingType": "automatic",
+                        "mode": "addToQueue",
+                    }
+                }
+            }
+        )
+        resp.raise_for_status()
+        data = resp.json()
+
+        if data.get("errors"):
+            print(f"[linkedin_scheduler] Warning: channel {channel_id} — {data['errors']}")
+        else:
+            result = data.get("data", {}).get("createPost", {})
+            post = result.get("post", {})
+            error_msg = result.get("message")
+            if post:
+                print(f"[linkedin_scheduler] Queued on channel {channel_id}: post {post.get('id')} ({post.get('status')})")
+            elif error_msg:
+                print(f"[linkedin_scheduler] Error on channel {channel_id}: {error_msg}")
+        results.append(data)
+
+    return results
 
 
 def main():
@@ -270,18 +313,19 @@ def main():
     args = parser.parse_args()
 
     token = get_env("BUFFER_ACCESS_TOKEN")
-    profile_id = get_env("BUFFER_LINKEDIN_PROFILE_ID")
+    personal_id = get_env("BUFFER_LINKEDIN_PERSONAL_ID")
+    company_id = get_env("BUFFER_LINKEDIN_COMPANY_ID")
 
-    if not args.dry_run:
-        if not token:
-            print("[linkedin_scheduler] ERROR: BUFFER_ACCESS_TOKEN not set.")
-            print("  Add to caseglide-platform/.env.local: BUFFER_ACCESS_TOKEN=your_token")
-            sys.exit(1)
-        if not profile_id:
-            print("[linkedin_scheduler] ERROR: BUFFER_LINKEDIN_PROFILE_ID not set.")
-            print("  Run: curl 'https://api.bufferapp.com/1/profiles.json?access_token=YOUR_TOKEN'")
-            print("  Add the id field to .env.local: BUFFER_LINKEDIN_PROFILE_ID=...")
-            sys.exit(1)
+    if not args.dry_run and not token:
+        print("[linkedin_scheduler] ERROR: BUFFER_ACCESS_TOKEN not set.")
+        sys.exit(1)
+
+    # Post to both profiles if available
+    channel_ids = [cid for cid in [personal_id, company_id] if cid]
+    if not args.dry_run and not channel_ids:
+        print("[linkedin_scheduler] ERROR: No LinkedIn channel IDs set.")
+        print("  Set BUFFER_LINKEDIN_PERSONAL_ID and/or BUFFER_LINKEDIN_COMPANY_ID in .env.local")
+        sys.exit(1)
 
     state = load_state()
     verdicts = parse_nuclear_verdicts()
@@ -307,15 +351,15 @@ def main():
             save_state(state)
         return
 
-    print(f"\n[linkedin_scheduler] Post preview (first 100 chars):")
-    print(f"  {post_text[:100]}...")
+    print(f"\n[linkedin_scheduler] Post preview (first 150 chars):")
+    print(f"  {post_text[:150]}...")
+    print(f"[linkedin_scheduler] Posting to: {', '.join(['Wesley Todd (personal)', 'CaseGlide (company)'][:len(channel_ids)])}")
 
     if args.dry_run:
         print("\n[DRY RUN] Post not sent to Buffer.")
         return
 
-    result = post_to_buffer(token, profile_id, post_text)
-    print(f"[linkedin_scheduler] Posted to Buffer: {result.get('success', False)}")
+    post_to_buffer(token, channel_ids, post_text)
 
     # Update state
     state["last_template_index"] = (current_index + 1) % len(TEMPLATE_ORDER)
