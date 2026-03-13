@@ -223,13 +223,6 @@ def main():
 
     existing_emails = get_existing_contact_emails(api_key)
 
-    # Pre-check credit budget — scale caps if total exceeds weekly budget
-    active_keys = [k for k in campaign_keys if criteria["campaigns"].get(k, {}).get("sequence_id")]
-    credit_scale = check_credit_budget(criteria, active_keys)
-
-    all_batches = []
-    summary_items = []
-
     if args.campaign:
         campaign_keys = [args.campaign]
     else:
@@ -240,6 +233,13 @@ def main():
         for k in criteria["campaigns"]:
             if k not in campaign_keys:
                 campaign_keys.append(k)
+
+    # Pre-check credit budget — scale caps if total exceeds weekly budget
+    active_keys = [k for k in campaign_keys if criteria["campaigns"].get(k, {}).get("sequence_id")]
+    credit_scale = check_credit_budget(criteria, active_keys)
+
+    all_batches = []
+    summary_items = []
 
     for campaign_key in campaign_keys:
         campaign = criteria["campaigns"][campaign_key]
