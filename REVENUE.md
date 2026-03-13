@@ -1,5 +1,5 @@
 # REVENUE.md — GTM Revenue Tracking
-*Updated: 2026-03-07*
+*Updated: 2026-03-10 (state-file-audit — metrics refreshed to Mar 9)*
 
 ## Apollo Email Campaigns
 
@@ -11,12 +11,13 @@
 - **Contacts:** 7,641 active (Peter Zimmerman removed Mar 7 — deceased)
 - **Steps:** 5 (Day 1/3/6/9/14)
 - **Schedule:** Mon-Fri, 7AM-6PM ET
-- **Metrics (as of Mar 4):**
-  - Delivered: 207
-  - Bounce rate: 0.07% (5 bounced) — 97.3% delivery rate
-  - Open rate: 31.4%
-  - Click rate: 29%
-  - Reply rate: TBD
+- **Metrics (as of Mar 9):**
+  - Delivered: 746
+  - Bounce rate: 1.7% (13 bounced) — well below 5% threshold
+  - Open rate: 27.9% (trending up from 23.3% on Mar 6)
+  - Click rate: 24.1% (NOTE: inflated by enterprise security bots — ignore)
+  - Reply rate: 0.3% (2 in Apollo / 4+ actual — check sarahjohnson@ inbox)
+  - Beehiiv subscribers: 9
 
 ### Campaign 2 — CRO / VP Risk Outreach
 - **Status:** BUILT + CONTACTS LOADED — ready for activation Mar 17
@@ -47,7 +48,7 @@
 
 ## LinkedIn Content
 
-- **Status:** NOT STARTED formally
+- **Status:** ACTIVE — 6-post calendar built (Mar 10-21), approved by Wes. Post #1 today Mar 10.
 - **Target:** 3 posts/week
 - **Posting window:** 7:30-8:30 AM ET
 - **Link comments:** Delayed ~4 hours after post

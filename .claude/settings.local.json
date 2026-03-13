@@ -68,7 +68,15 @@
       "Bash(python3 scripts/legacy_list_audit.py*)",
       "mcp__scheduled-tasks__create_scheduled_task",
       "mcp__scheduled-tasks__update_scheduled_task",
-      "mcp__scheduled-tasks__delete_scheduled_task"
+      "mcp__scheduled-tasks__delete_scheduled_task",
+      "Bash(cd \"/Users/wesleytodd/Desktop/Claude Code-COS\" && APOLLO_API_KEY=awzxfSRNmjkvU-wGvizuOg python3 -c \"\nimport requests, json\n\nresp = requests.get\\(\n    'https://api.apollo.io/v1/emailer_campaigns',\n    headers={'Content-Type': 'application/json'},\n    params={'api_key': 'awzxfSRNmjkvU-wGvizuOg', 'per_page': 25}\n\\)\ncampaigns = resp.json\\(\\).get\\('emailer_campaigns', []\\)\nfor c in campaigns:\n    print\\(f\\\\\"ID: {c['id']}\\\\\"\\)\n    print\\(f\\\\\"  Name: {c['name']}\\\\\"\\)\n    print\\(f\\\\\"  Status: {c['status']}\\\\\"\\)\n    print\\(f\\\\\"  Contacts: {c.get\\('num_active_contacts', 0\\)} active, {c.get\\('num_contacts', 0\\)} total\\\\\"\\)\n    print\\(\\)\n\")",
+      "WebSearch",
+      "WebFetch(domain:apolloio.github.io)",
+      "WebFetch(domain:www.unkoa.com)",
+      "WebFetch(domain:support.apollo.io)",
+      "WebFetch(domain:www.apollo.io)",
+      "WebFetch(domain:apidocs.apollohq.com)",
+      "mcp__plugin_playwright_playwright__browser_navigate"
     ],
     "deny": [
       "Read(gmail-cleanup/credentials.json)",

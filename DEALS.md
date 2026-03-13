@@ -1,5 +1,5 @@
 # DEALS.md — Active Deal Pipeline
-*Updated: 2026-03-06*
+*Updated: 2026-03-10 (state-file-audit — Hiscox ITB date corrected, Eaton outcome pending)*
 
 ## Ownership
 - this should be maintained by sales-agent
@@ -11,8 +11,8 @@
 | EY | Partnership Regroup | 🟢 | Meeting invite from Michael Curcio (Feb 26) | Prep for 3/25 @ 1pm Teams call |
 | SageSure | Demo Scheduling | 🟢 | RFP v3 FINAL submitted (90% core) | Schedule demo week of Mar 16 or 23 |
 | Hartford | Demo Follow-Up | 🟢 | Jason Winnell OOO, returns Mar 6 | Expect response Fri/Mon. Second touch Mar 11 if silent |
-| Eaton Corporation | Trial Introduction | 🟢 | Demo script + presentation + trial packet READY | Trial intro meeting 3/9 @ 11am |
-| **Hiscox** | **RFP Response** | **🟡** | **RFP response drafted Mar 6** | **Intent to Bid due Wed Mar 11** |
+| Eaton Corporation | Trial Introduction | 🟡 | Trial intro meeting COMPLETED Mar 9 — outcome unknown | Confirm trial kick-off week of Mar 24; Liana sends activation details |
+| **Hiscox** | **RFP Response** | **🟠** | **ITB deadline passed Mar 9 — submission status UNKNOWN** | **Confirm ITB was submitted; full RFP due Mar 31** |
 
 ---
 
@@ -52,7 +52,7 @@
 **Stage:** Trial Introduction
 **Context:** Asbestos litigation portfolio. 10-case demo delivered. Meeting scheduled to formally introduce Trial program.
 **Last action:** Demo script, presentation, and trial packet prepared for Mar 9 call. All materials in CaseGlide 2026 folder.
-**Next action:** Trial intro meeting **Monday March 9 @ 11am**. Liana attending per calendar. Wes to review materials by 3/7.
+**Next action:** Trial intro meeting COMPLETED Mar 9. Outcome not yet captured — confirm Charlie's commitment + trial kick-off week of Mar 24. Liana to send activation details.
 **Deliverables ready:**
 - Eaton_Trial_Demo_Script_Mar9.docx (25-min modified script, Wes + Liana roles)
 - Eaton_Trial_Demo_Presentation_Mar9.pdf (12-slide deck, navy/gold design)
@@ -74,7 +74,7 @@
 
 ---
 
-## Hiscox — INTENT TO BID DUE WED MAR 11
+## Hiscox — ITB DEADLINE PASSED MAR 9 (SUBMISSION STATUS UNKNOWN)
 **Contact:** Sroop Grewal (procurement organizer) | sroop.grewal@hiscox.com
 **Stage:** RFP Response In Progress
 **Context:** Litigation Management System RFP. Global specialty insurer. Full RFP received Mar 6: 47 requirements, 15 narrative questions, NAIC AI form, pricing book, MSA/SOW templates.
@@ -85,6 +85,6 @@
 - Compliance: 44/47 Fully Compliant, 2 Partially, 1 Alternative
 - All 15 narrative questions answered
 - NAIC AI Evaluation Form completed (4 models)
-**Last action:** All-hands call attended Mar 6. Full RFP response drafted same day.
-**Next action:** Submit Intent to Bid by **Wednesday March 11**. Wes to review draft and answer questions.
-**Risk:** Medium — strong technical fit but missing some certifications (ISO, FSQS, Cyber Essentials). SOC 2 Type II positioning is solid. Pricing strategy critical.
+**Last action:** Intent to Bid email DRAFTED Mar 9 (CaseGlide 2026/tasks/hiscox-intent-to-bid-email.md). ITB deadline was Mar 9 per RFP Section 3.1.
+**Next action:** CONFIRM whether ITB email was sent to sroop.grewal@hiscox.com + iValua portal logged. Full RFP response due Mar 31.
+**Risk:** HIGH — ITB deadline passed. If not submitted, CaseGlide may be disqualified. Confirm immediately.

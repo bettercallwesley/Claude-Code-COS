@@ -1,5 +1,5 @@
 # STATUS.md — CaseGlide Pipeline State
-*Updated: 2026-03-09 (Session 13) | Intent to Bid email DRAFTED (due TODAY Mar 9) | Campaign 1 Day 8: 746 delivered, 27.9% open | Campaign 2: 3,735 loaded, awaiting activation | Eaton meeting notes READY | All subagent deliverables COMPLETE*
+*Updated: 2026-03-10 (state-file-audit) | CRITICAL: Hiscox ITB deadline passed Mar 9 — confirm submission | Eaton meeting completed Mar 9 — outcome unknown | Campaign 1 Day 9: 746 delivered, 27.9% open | Campaign 2: 3,735 loaded, awaiting activation*
 
 ---
 
@@ -22,10 +22,10 @@
 
 ---
 
-### 2. Hiscox — INTENT TO BID DUE TODAY MAR 9
+### 2. Hiscox — ITB DEADLINE PASSED MAR 9 — CONFIRM SUBMISSION
 **Stage:** RFP Response In Progress
 **Contact:** Sroop Grewal (procurement organizer) | sroop.grewal@hiscox.com
-**Last Action:** Intent to Bid email DRAFTED Mar 9. NDA eSigned Mar 6. Date correction: RFP says ITB due Mar 9 (not Mar 11).
+**Last Action:** Intent to Bid email DRAFTED Mar 9 (CaseGlide 2026/tasks/hiscox-intent-to-bid-email.md). Deadline was Mar 9. Submission status UNKNOWN.
 **Known Constraints:** No DUNS, no FSQS, not insured by Hiscox — SOC 2 Type II is primary cert
 **Open Items:**
 - [x] Portal submission confirmed
@@ -38,8 +38,8 @@
 - [x] NAIC AI Evaluation Form completed (4 models)
 - [x] NDA eSigned Mar 6 (confirmed in Gmail)
 - [x] Intent to Bid email DRAFTED — CaseGlide 2026/tasks/hiscox-intent-to-bid-email.md
-- [ ] **WES: Send Intent to Bid email to sroop.grewal@hiscox.com — DUE TODAY**
-- [ ] **WES: Log into iValua portal + confirm ITB (CAPTCHA required)**
+- [ ] **WES: CONFIRM — Was Intent to Bid email sent to sroop.grewal@hiscox.com?**
+- [ ] **WES: CONFIRM — Was iValua portal logged to confirm ITB?**
 - [ ] Wes to review response draft + answer 14 questions (pricing, references, legal)
 - [ ] Pricing Book (P1-P5 + day rates) — Wes input required
 - [ ] Reference customers — confirm FIGA + PURE willingness
@@ -51,22 +51,18 @@
 
 ---
 
-### 3. Eaton Corporation — TODAY 11 AM
+### 3. Eaton Corporation — MEETING COMPLETED MAR 9 (OUTCOME UNKNOWN)
 **Stage:** Trial Introduction
 **Contacts:** Charlie Price (Senior Litigation Manager), Jennifer Greene (DeHay & Elliston, LLP)
-**Last Action:** Meeting notes updated Mar 9. Liana flagged platform bug — trial start pushed 1 week.
+**Last Action:** Trial intro meeting HELD Mar 9 @ 11 AM. Outcome not yet captured.
 **Open Items:**
 - [x] 10-case demo delivered
-- [x] Prep doc: tasks/eaton-trial-prep-mar9.md
-- [x] Demo script prepared: Eaton_Trial_Demo_Script_Mar9.docx
-- [x] Demo presentation prepared: Eaton_Trial_Demo_Presentation_Mar9.pdf
-- [x] Trial packet prepared: Eaton_Trial_Packet_Mar2026.pdf
-- [x] Liana confirmed attending + updated slides with corrected dates
-- [x] Meeting notes updated for 1-week delay: tasks/eaton-meeting-notes-mar9.md
-- [ ] **Meeting TODAY 11 AM** — orientation call, trial starts week of Mar 24 (was Mar 17)
-- [ ] Post-call: Liana sends activation details, confirm Mar 24 kick-off
-**Next Action:** Trial intro meeting **Monday March 9 @ 11am**. Trial start pushed to week of Mar 24 due to platform bug.
-**Owner:** Wes (call) + Liana (onboarding)
+- [x] Trial intro meeting held Mar 9 @ 11am
+- [ ] **Capture meeting outcome** — Did Charlie commit to trial week of Mar 24?
+- [ ] **Liana to send activation details** — Confirm she's sending post-call
+- [ ] Confirm Mar 24 kick-off date via email
+**Next Action:** Confirm trial commitment + Liana activation details sent. Trial targets week of Mar 24.
+**Owner:** Wes (confirm outcome) + Liana (activation)
 
 ---
 
@@ -219,17 +215,16 @@
 - **George Pavarini reply confirmed SENT** — Wes sent Mar 6 7:13 PM from sarahjohnson@. No response yet (weekend).
 - **FileForms flagged** — CaseGlide FL Annual Report due May 1, $400 late fee.
 - **Hiscox NDA eSigned** — Confirmed in Gmail Mar 6.
-**Pending:**
-- **WES: Send Hiscox Intent to Bid email to Sroop — DUE TODAY**
-- **WES: Confirm ITB on iValua portal (CAPTCHA) — DUE TODAY**
+**Pending (as of Mar 10):**
+- **WES: CONFIRM Hiscox ITB — was email sent + iValua portal logged? Deadline was yesterday (Mar 9).**
+- **WES: CONFIRM Eaton meeting outcome — did Charlie commit to trial week of Mar 24?**
+- **WES: Send Pacific Specialty demo invite TODAY (Mar 10)** — Draft at tasks/pacific-specialty-demo-invite.md
+- **WES: LinkedIn Post #1 today** — Copy at tasks/linkedin-post-1-final.md
 - **WES: Decide on Campaign 2 activation (recommend NOW)**
-- **WES: Eaton meeting 11 AM today** — notes ready
-- **WES: Send Pacific Specialty demo invite Mar 10** — Draft ready
-- **WES: LinkedIn Post #1 Mar 10** — Copy ready
 - **WES: Pull Desiree Ingram email for SageSure follow-up**
-- Monitor George Pavarini for response (expect today/tomorrow)
+- Hartford second touch Mar 11 if still silent (TOMORROW)
+- Monitor George Pavarini for response
 - Monitor Elizabeth Connolly (next touch Mar 13 if silent)
-- Hartford second touch Mar 11 if still silent
 - EY regroup prep (3/25 deadline — start week of 3/16)
 - Campaign 2: Activate when Wes approves
 - Deploy 400-500 new contacts/week to Campaign 1 starting ~Mar 16

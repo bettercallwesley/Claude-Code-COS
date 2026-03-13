@@ -54,6 +54,13 @@ OG metadata: live on all routes
 | Mar 2, 2026 | Campaign funnel repair: /api/briefing-capture, ScheduleModal wired, email gate on results, program selection capture, Council/Trial schedule buttons, CaseGlide.com footer links | ✅ Built, pending deploy |
 | Mar 3, 2026 | Apollo custom tracking domain: CNAME track.trycaseglide.com → victorious-crab.aploconnect.com added to Squarespace DNS | ✅ DNS saved, propagation ~4 hrs |
 
+## Health Check Log
+
+### 2026-03-10 Health Check
+- Routes: / [200] | /nuclear-verdicts [200] | /briefing [200] | /council [200] | /trial [200]
+- Deploy: [unavailable (no noon scan today)]
+- Visitors (24h): [unavailable (no noon scan today)]
+
 ## Deployment Flow (Wes does this in 10 seconds)
 Chief of Staff writes code → tells Wes:
 "Open a new issue at github.com/bettercallwesley/litigation-sentinel,
