@@ -13,6 +13,14 @@ global_exclusions:
     - bounced
     - unsubscribed
 
+# Processing order for weekly_list_build.py — higher tiers claim contacts first
+tier_priority:
+  - tier_1_f500_legal
+  - tier_2_f500_risk
+  - tier_3_insurance_leadership
+  - tier_5_insurance_litigation
+  # tier_4_guidewire intentionally excluded — on hold pending partnership approval
+
 campaigns:
   campaign_1_gc_clo:
     name: "Campaign 1 - GC / CLO Cold Outreach"
@@ -47,28 +55,104 @@ campaigns:
     person_locations:
       - "United States"
 
-  campaign_2_cro_vp_risk:
-    name: "Campaign 2 - CRO / VP Risk Outreach"
-    sequence_id: null  # Must set after creating sequence in Apollo UI
+  tier_1_f500_legal:
+    name: "Tier 1 - F500 Legal (GC / CLO)"
+    sequence_id: null  # Set after creating sequence in Apollo UI
     mailbox_id: "69a598bdfd80760021e01e93"
     sender: "Sarah Johnson <sarahjohnson@trycaseglide.com>"
-    weekly_cap: 500
+    weekly_cap: 125
+    titles:
+      - "General Counsel"
+      - "Chief Legal Officer"
+      - "Deputy General Counsel"
+      - "VP Legal Operations"
+      - "Vice President Legal Operations"
+      - "VP of Legal Operations"
+    min_employees: 10000
+    contact_email_status:
+      - "verified"
+    person_locations:
+      - "United States"
+
+  tier_2_f500_risk:
+    name: "Tier 2 - F500 Risk (CRO / VP Risk)"
+    sequence_id: null  # Set after creating sequence in Apollo UI
+    mailbox_id: "69a598bdfd80760021e01e93"
+    sender: "Sarah Johnson <sarahjohnson@trycaseglide.com>"
+    weekly_cap: 125
     titles:
       - "Chief Risk Officer"
-      - "VP Risk"
-      - "Vice President Risk"
-      - "VP of Risk Management"
+      - "VP Risk Management"
       - "Vice President of Risk Management"
       - "VP of Risk"
       - "Vice President of Risk"
-      - "VP Claims"
-      - "Vice President of Claims"
+      - "VP Litigation"
+      - "Vice President of Litigation"
+      - "VP of Litigation"
+    min_employees: 10000
+    contact_email_status:
+      - "verified"
+    person_locations:
+      - "United States"
+
+  tier_3_insurance_leadership:
+    name: "Tier 3 - Insurance Leadership (CEO / CFO / COO)"
+    sequence_id: null  # Set after creating sequence in Apollo UI
+    mailbox_id: "69a598bdfd80760021e01e93"
+    sender: "Sarah Johnson <sarahjohnson@trycaseglide.com>"
+    weekly_cap: 125
+    titles:
+      - "Chief Executive Officer"
+      - "CEO"
+      - "Chief Financial Officer"
+      - "CFO"
+      - "Chief Operating Officer"
+      - "COO"
+      - "General Counsel"
+      - "Chief Legal Officer"
       - "Chief Claims Officer"
     industries:
       - "Insurance"
-      - "Financial Services"
-      - "Healthcare"
-      - "Manufacturing"
+    min_employees: 500
+    contact_email_status:
+      - "verified"
+    person_locations:
+      - "United States"
+
+  tier_4_guidewire:
+    name: "Tier 4 - Guidewire Ecosystem (ON HOLD)"
+    sequence_id: null  # DO NOT SET — on hold pending Guidewire partnership approval
+    enabled: false
+    mailbox_id: "69a598bdfd80760021e01e93"
+    sender: "Sarah Johnson <sarahjohnson@trycaseglide.com>"
+    weekly_cap: 125
+    titles:
+      - "Chief Information Officer"
+      - "VP Information Technology"
+      - "Vice President of IT"
+      - "VP of IT"
+    industries:
+      - "Insurance"
+    min_employees: 500
+    contact_email_status:
+      - "verified"
+    person_locations:
+      - "United States"
+
+  tier_5_insurance_litigation:
+    name: "Tier 5 - Insurance Litigation (VP Litigation)"
+    sequence_id: null  # Set after creating sequence in Apollo UI
+    mailbox_id: "69a598bdfd80760021e01e93"
+    sender: "Sarah Johnson <sarahjohnson@trycaseglide.com>"
+    weekly_cap: 125
+    titles:
+      - "VP Litigation"
+      - "Vice President of Litigation"
+      - "VP of Litigation Management"
+      - "Vice President Litigation Management"
+      - "Director of Litigation"
+    industries:
+      - "Insurance"
     min_employees: 500
     contact_email_status:
       - "verified"

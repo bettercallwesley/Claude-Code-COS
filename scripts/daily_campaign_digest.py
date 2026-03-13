@@ -17,9 +17,15 @@ Environment:
 import argparse
 import os
 import sys
+import time
 from datetime import datetime, timezone
 
 import requests
+
+try:
+    import yaml
+except ImportError:
+    yaml = None
 
 # --- Paths ---
 
@@ -32,6 +38,8 @@ REVENUE_FILE = os.path.join(PROJECT_ROOT, "REVENUE.md")
 
 DEFAULT_CAMPAIGN_ID = "699deee1299e51000d383130"
 CAMPAIGN_NAME = "GC/CLO Cold Outreach"
+
+CRITERIA_FILE = os.path.join(PROJECT_ROOT, "campaign-criteria.md")
 
 APOLLO_BASE = "https://api.apollo.io/v1"
 BEEHIIV_BASE = "https://api.beehiiv.com/v2"
@@ -55,6 +63,42 @@ def load_env(filepath):
 def get_key(name, env_overrides):
     """Get API key from environment or .env.local fallback."""
     return os.environ.get(name) or env_overrides.get(name)
+
+
+def load_active_campaigns():
+    """Load all campaigns with sequence_ids set from campaign-criteria.md.
+
+    Returns list of (campaign_key, campaign_dict) in tier_priority order.
+    Falls back to DEFAULT_CAMPAIGN_ID if criteria file missing or yaml unavailable.
+    """
+    if not os.path.exists(CRITERIA_FILE) or yaml is None:
+        return [("campaign_1_gc_clo", {"name": CAMPAIGN_NAME, "sequence_id": DEFAULT_CAMPAIGN_ID})]
+
+    content = open(CRITERIA_FILE).read()
+    yaml_lines = [l for l in content.splitlines() if not l.startswith("#")]
+    try:
+        data = yaml.safe_load("\n".join(yaml_lines))
+    except Exception:
+        return [("campaign_1_gc_clo", {"name": CAMPAIGN_NAME, "sequence_id": DEFAULT_CAMPAIGN_ID})]
+
+    campaigns = data.get("campaigns", {})
+    priority = data.get("tier_priority", list(campaigns.keys()))
+
+    active = []
+    for key in priority:
+        camp = campaigns.get(key, {})
+        if camp.get("sequence_id") and camp.get("enabled", True):
+            active.append((key, camp))
+
+    # Also include campaign_1_gc_clo if active and not already in priority list
+    for key, camp in campaigns.items():
+        if key not in [k for k, _ in active] and camp.get("sequence_id") and camp.get("enabled", True):
+            active.append((key, camp))
+
+    if not active:
+        active = [("campaign_1_gc_clo", {"name": CAMPAIGN_NAME, "sequence_id": DEFAULT_CAMPAIGN_ID})]
+
+    return active
 
 
 # --- Apollo ---
@@ -142,17 +186,20 @@ def fetch_beehiiv_subscribers(api_key, pub_id):
 
 # --- Output ---
 
-def build_digest(apollo_metrics, beehiiv_data, date_str):
-    """Build the markdown digest string."""
+def build_digest(all_apollo_metrics, beehiiv_data, date_str):
+    """Build the markdown digest string for all active campaigns."""
     lines = []
     lines.append(f"# Campaign Digest -- {date_str}")
     lines.append("")
 
-    # Apollo section
-    if apollo_metrics:
-        m = apollo_metrics
+    total_delivered = 0
+    total_opened = 0
+
+    for m in all_apollo_metrics:
+        if not m:
+            continue
         status = "ACTIVE" if m["active"] else "PAUSED"
-        lines.append(f"## Apollo Campaign 1 ({m['name']})")
+        lines.append(f"## {m['name']}")
         lines.append(f"- Status: {status}")
         lines.append(f"- Contacts in sequence: {m['total_in_sequence']:,}")
         lines.append(f"- Delivered: {m['delivered']:,}")
@@ -163,11 +210,14 @@ def build_digest(apollo_metrics, beehiiv_data, date_str):
             lines.append("- Click rate: N/A (tracking disabled)")
         lines.append(f"- Reply rate: {m['reply_rate']}% ({m['replied']:,}/{m['delivered']:,})")
         lines.append(f"- Bounce rate: {m['bounce_rate']}% ({m['bounced']:,}/{m['delivered']:,})")
-    else:
-        lines.append("## Apollo Campaign 1")
-        lines.append("- ERROR: Could not fetch Apollo metrics")
+        lines.append("")
+        total_delivered += m["delivered"]
+        total_opened += m["opened"]
 
-    lines.append("")
+    if not all_apollo_metrics:
+        lines.append("## Apollo Campaigns")
+        lines.append("- ERROR: Could not fetch metrics")
+        lines.append("")
 
     # Beehiiv section
     if beehiiv_data:
@@ -176,16 +226,16 @@ def build_digest(apollo_metrics, beehiiv_data, date_str):
     else:
         lines.append("## Beehiiv Newsletter")
         lines.append("- ERROR: Could not fetch Beehiiv metrics")
-
     lines.append("")
 
-    # Funnel summary
-    lines.append("## Funnel Summary")
-    delivered = apollo_metrics["delivered"] if apollo_metrics else "?"
-    opened = apollo_metrics["opened"] if apollo_metrics else "?"
+    # Funnel summary (aggregate)
     subs = beehiiv_data["total"] if beehiiv_data else "?"
-    lines.append("Emails -> Opens -> Site Visits -> Subscribers -> Briefing Submissions")
-    lines.append(f"{delivered} -> {opened} -> (check Vercel) -> {subs} -> (check manually)")
+    lines.append("## Funnel Summary (All Campaigns)")
+    lines.append(f"- Total delivered: {total_delivered:,}")
+    lines.append(f"- Total opens: {total_opened:,}")
+    lines.append(f"- Newsletter subscribers: {subs}")
+    lines.append("- Site visits: check Vercel analytics")
+    lines.append("- Briefing submissions: check manually")
     lines.append("")
 
     return "\n".join(lines)
@@ -236,8 +286,21 @@ def main():
     # Fetch data
     date_str = datetime.now().strftime("%Y-%m-%d")
 
-    campaign_raw = fetch_apollo_campaign(apollo_key, args.campaign_id)
-    apollo_metrics = parse_apollo_metrics(campaign_raw)
+    if args.campaign_id != DEFAULT_CAMPAIGN_ID:
+        # Explicit --campaign-id passed: single campaign mode
+        campaign_raw = fetch_apollo_campaign(apollo_key, args.campaign_id)
+        all_apollo_metrics = [parse_apollo_metrics(campaign_raw)]
+    else:
+        # Default: report all active campaigns from campaign-criteria.md
+        active_campaigns = load_active_campaigns()
+        all_apollo_metrics = []
+        for camp_key, camp in active_campaigns:
+            raw = fetch_apollo_campaign(apollo_key, camp["sequence_id"])
+            metrics = parse_apollo_metrics(raw)
+            if metrics:
+                metrics["name"] = camp.get("name", metrics["name"])
+            all_apollo_metrics.append(metrics)
+            time.sleep(0.2)
 
     beehiiv_data = None
     if beehiiv_key and beehiiv_pub:
@@ -246,7 +309,7 @@ def main():
         print("WARNING: Beehiiv API key or publication ID not found. Skipping.", file=sys.stderr)
 
     # Build output
-    digest = build_digest(apollo_metrics, beehiiv_data, date_str)
+    digest = build_digest(all_apollo_metrics, beehiiv_data, date_str)
     print(digest)
 
     # Optionally append to REVENUE.md

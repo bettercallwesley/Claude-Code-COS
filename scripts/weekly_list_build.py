@@ -26,6 +26,9 @@ import requests
 from typing import Dict, List, Optional
 import yaml
 
+# Weekly email credit budget — contacts discovered require 1 credit each to convert
+WEEKLY_CREDIT_BUDGET = 500
+
 # ── Setup ───────────────────────────────────────────────────────────────────
 
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -58,7 +61,33 @@ def load_criteria() -> dict:
     return yaml.safe_load("\n".join(yaml_lines))
 
 
-def get_existing_contact_emails(api_key: str) -> set[str]:
+def check_credit_budget(criteria: dict, campaign_keys: List[str]) -> float:
+    """Compute total contacts requested this week and warn if over budget.
+
+    Returns a float scale factor (0.0-1.0). Multiply each campaign's weekly_cap
+    by this factor to stay within WEEKLY_CREDIT_BUDGET.
+    Apollo doesn't expose credit balance via API — this is a soft guard.
+    """
+    total_requested = sum(
+        criteria["campaigns"][k].get("weekly_cap", 500)
+        for k in campaign_keys
+        if k in criteria["campaigns"] and criteria["campaigns"][k].get("sequence_id")
+    )
+
+    if total_requested > WEEKLY_CREDIT_BUDGET:
+        scale = WEEKLY_CREDIT_BUDGET / total_requested
+        print(
+            f"[weekly_list_build] WARNING: Total requested ({total_requested}) exceeds "
+            f"weekly budget ({WEEKLY_CREDIT_BUDGET}). Scaling caps by {scale:.0%}."
+        )
+        return scale
+
+    print(f"[weekly_list_build] Credit check: {total_requested} contacts requested, "
+          f"{WEEKLY_CREDIT_BUDGET} budget — OK")
+    return 1.0
+
+
+def get_existing_contact_emails(api_key: str) -> set:
     """Pull all existing Apollo CRM contact emails for deduplication."""
     emails = set()
     page = 1
@@ -67,8 +96,8 @@ def get_existing_contact_emails(api_key: str) -> set[str]:
     while True:
         resp = requests.post(
             f"{APOLLO_BASE}/contacts/search",
-            headers=headers,
-            json={"api_key": api_key, "page": page, "per_page": 100}
+            headers={**headers, "x-api-key": api_key},
+            json={"page": page, "per_page": 100}
         )
         if resp.status_code == 429:
             print("[weekly_list_build] Rate limited on contacts/search — waiting 60s")
@@ -96,9 +125,8 @@ def get_existing_contact_emails(api_key: str) -> set[str]:
 
 def search_people(api_key: str, campaign: dict, page: int = 1) -> dict:
     """Search Apollo people database for matching profiles."""
-    headers = {"Content-Type": "application/json", "Cache-Control": "no-cache"}
+    headers = {"Content-Type": "application/json", "Cache-Control": "no-cache", "x-api-key": api_key}
     payload = {
-        "api_key": api_key,
         "page": page,
         "per_page": 100,
         "person_titles": campaign["titles"],
@@ -117,7 +145,7 @@ def search_people(api_key: str, campaign: dict, page: int = 1) -> dict:
     return resp.json()
 
 
-def build_batch(api_key: str, criteria: dict, existing_emails: set[str],
+def build_batch(api_key: str, criteria: dict, existing_emails: set,
                 campaign_key: str, weekly_cap: int, dry_run: bool) -> List[Dict]:
     """Find new contacts for a campaign, deduped and capped."""
     campaign = criteria["campaigns"][campaign_key]
@@ -195,10 +223,23 @@ def main():
 
     existing_emails = get_existing_contact_emails(api_key)
 
+    # Pre-check credit budget — scale caps if total exceeds weekly budget
+    active_keys = [k for k in campaign_keys if criteria["campaigns"].get(k, {}).get("sequence_id")]
+    credit_scale = check_credit_budget(criteria, active_keys)
+
     all_batches = []
     summary_items = []
 
-    campaign_keys = [args.campaign] if args.campaign else list(criteria["campaigns"].keys())
+    if args.campaign:
+        campaign_keys = [args.campaign]
+    else:
+        # Use tier_priority for deterministic order — higher tiers claim contacts first
+        priority_order = criteria.get("tier_priority", list(criteria["campaigns"].keys()))
+        campaign_keys = [k for k in priority_order if k in criteria["campaigns"]]
+        # Append any campaigns not in priority list (campaign_1_gc_clo runs after tiers)
+        for k in criteria["campaigns"]:
+            if k not in campaign_keys:
+                campaign_keys.append(k)
 
     for campaign_key in campaign_keys:
         campaign = criteria["campaigns"][campaign_key]
@@ -207,7 +248,11 @@ def main():
             print(f"[weekly_list_build] SKIP {campaign_key} — no sequence_id set in campaign-criteria.md")
             continue
 
-        weekly_cap = campaign.get("weekly_cap", 500)
+        if not campaign.get("enabled", True):
+            print(f"[weekly_list_build] SKIP {campaign_key} — disabled in campaign-criteria.md")
+            continue
+
+        weekly_cap = int(campaign.get("weekly_cap", 500) * credit_scale)
         batch = build_batch(api_key, criteria, existing_emails, campaign_key, weekly_cap, args.dry_run)
         all_batches.extend(batch)
 
