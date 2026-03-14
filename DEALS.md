@@ -12,7 +12,7 @@
 | SageSure | Demo Scheduling | 🟢 | RFP v3 FINAL submitted (90% core) | Schedule demo week of Mar 16 or 23 |
 | Hartford | Demo Follow-Up | 🟢 | Jason Winnell OOO, returns Mar 6 | Expect response Fri/Mon. Second touch Mar 11 if silent |
 | Eaton Corporation | Trial Introduction | 🟡 | Trial intro meeting COMPLETED Mar 9 — outcome unknown | Confirm trial kick-off week of Mar 24; Liana sends activation details |
-| **Hiscox** | **RFP Response** | **🟠** | **ITB deadline passed Mar 9 — submission status UNKNOWN** | **Confirm ITB was submitted; full RFP due Mar 31** |
+| Hiscox | CLOSED — DECLINED | 🔴 | RFP declined Mar 13. Sroop Grewal followed up; Wes confirmed no re-engagement. | None — closed. |
 
 ---
 
@@ -74,17 +74,9 @@
 
 ---
 
-## Hiscox — ITB DEADLINE PASSED MAR 9 (SUBMISSION STATUS UNKNOWN)
-**Contact:** Sroop Grewal (procurement organizer) | sroop.grewal@hiscox.com
-**Stage:** RFP Response In Progress
-**Context:** Litigation Management System RFP. Global specialty insurer. Full RFP received Mar 6: 47 requirements, 15 narrative questions, NAIC AI form, pricing book, MSA/SOW templates.
-**Hard constraints:** CaseGlide has NO DUNS number, NO FSQS registration, NOT insured by Hiscox. SOC 2 Type II is primary certification.
-**RFP Response Status:**
-- Full draft completed: Hiscox_RFP_Response_DRAFT.md (CaseGlide 2026 folder)
-- Questions for Wes: Hiscox_RFP_Questions_for_Wes.md (14 items — pricing, references, legal, policies)
-- Compliance: 44/47 Fully Compliant, 2 Partially, 1 Alternative
-- All 15 narrative questions answered
-- NAIC AI Evaluation Form completed (4 models)
-**Last action:** Intent to Bid email DRAFTED Mar 9 (CaseGlide 2026/tasks/hiscox-intent-to-bid-email.md). ITB deadline was Mar 9 per RFP Section 3.1.
-**Next action:** CONFIRM whether ITB email was sent to sroop.grewal@hiscox.com + iValua portal logged. Full RFP response due Mar 31.
-**Risk:** HIGH — ITB deadline passed. If not submitted, CaseGlide may be disqualified. Confirm immediately.
+## Hiscox — CLOSED (DECLINED Mar 13)
+**Contact:** Sroop Grewal (procurement) | sroop.grewal@hiscox.com
+**Stage:** CLOSED — No bid
+**Context:** RFP strategically declined. Hiscox has a 4-year pattern of using RFPs to gather free requirements without progressing to contract. Sroop followed up Mar 13 asking for rationale. Wes confirmed final decision: no re-engagement.
+**Last action:** Declined via iValua portal. Sroop's follow-up email received Mar 13 — no reply needed.
+**Risk:** None — closed.

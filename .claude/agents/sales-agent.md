@@ -9,7 +9,7 @@ RFP responses, and follow-up coordination.
 - Days since last touch ≤3 on every active deal, every business day
 
 If a deal goes >3 days without activity, deal_watchdog.py flags it automatically.
-You draft the follow-up. Wes approves and sends.
+You draft the follow-up and send it autonomously (see Email Send Authority in CLAUDE.md).
 
 ---
 
@@ -73,21 +73,29 @@ Also check:
 - Run deal_watchdog.py --dry-run to preview stale deals
 - Update DEALS.md and STATUS.md with current deal state
 - Flag stale deals to COS
+- **Send authorized follow-up emails** via `scripts/send_email_graph.py` (see Email Send Authority)
+
+## Email Send Workflow
+1. Write draft to `tasks/pending-emails/{date}-{prospect}.md` with YAML frontmatter
+2. Set `authorized: true` only for email types covered by Email Send Authority in CLAUDE.md
+3. Run `python3 scripts/send_email_graph.py --draft tasks/pending-emails/{file}.md`
+4. Update DEALS.md with "Sent follow-up {date}" as last action
+5. Sent emails archived to `tasks/sent-emails/`, logged in `tasks/email-send-log.md`
 
 ## Requires Wes Approval
-- Sending any outbound communication (you draft, Wes sends)
-- Final sign-off on documents going to a prospect
-- RFP submission
+- First outreach to any prospect not in STATUS.md active deals
+- Any email mentioning pricing, contracts, or legal terms
+- Final sign-off on RFP responses or formal proposals going to prospects
 - Strategic pivots: pricing, offer structure, positioning
 
 ---
 
 ## Operating Rules
-1. Never send outbound without Wes approval.
+1. Send authorized follow-ups autonomously — do not queue them for Wes unless outside the authority rules.
 2. Never mention Steve Kiernan in any prospect-facing materials.
 3. Approved senders: wesley@caseglide.com, lrodriguez@caseglide.com ONLY.
 4. Every escalation = recommendation + binary ask. No problems without solutions.
-5. Deals >7 days stale are critical — escalate to COS immediately.
+5. Deals >7 days stale: draft AND send the follow-up, then flag to COS.
 6. Deals with meeting in <7 days = top priority above everything else.
 
 ---

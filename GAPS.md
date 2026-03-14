@@ -22,12 +22,13 @@
 | 16 | ~~Notification system not deployed~~ | ~~Subscribe notifications + track-event route built but not on production~~ | RESOLVED Mar 4 — notification system was already deployed in commit bea9801 ("Add notification system"). Redeployed with correct Beehiiv key. | NO |
 | 17 | Newsletter first email issue | First Litigation Sentinel email needed in ~2 weeks | NOT STARTED — marketing-agent to draft content | NO |
 | 18 | ~~Resend DNS records for litigationsentinel.com~~ | ~~Notification emails sending from onboarding@resend.dev~~ | RESOLVED Mar 6 — DKIM + SPF verified, domain fully propagated. Resend package not installed in codebase (was removed during email flood fix). Re-add Resend send call when needed. | NO |
-| 20 | **Hiscox ITB — DEADLINE PASSED MAR 9 — STATUS UNKNOWN** | ITB deadline was Mar 9. Email draft was ready. Unknown if Wes sent email or logged iValua portal. If not sent, disqualification risk. | Wes must confirm submission. If missed, email Sroop Grewal immediately to request extension. | **YES — CONFIRM NOW** |
-| 25 | FileForms: CaseGlide FL Annual Report due May 1 | $400 late fee if missed. Email flagged Mar 9. | NOT STARTED — calendar reminder needed | NO |
-| 21 | Hiscox RFP pricing | Cannot submit final response without pricing (P1-P5 + day rates) | Wes must provide pricing inputs — see Hiscox_RFP_Questions_for_Wes.md | YES |
-| 22 | Hiscox reference customers | RFP requires 2 reference customers willing to do calls | Recommend FIGA + PURE — Wes must confirm willingness | NO |
-| 23 | Hiscox MSA/SOW legal review | MSA template with AI clauses requires attorney review | Wes must review as CEO/attorney — docs in Hiscox RFP Docs folder | NO |
-| 24 | Hiscox policy documents | Ethics policy, BCP/DR doc, H&S policy requested — CaseGlide may not have formal versions | COS can draft if Wes approves — see Hiscox_RFP_Questions_for_Wes.md items 6-8 | NO |
+| 20 | ~~Hiscox ITB~~ | ~~ITB deadline passed Mar 9~~ | RESOLVED Mar 13 — Hiscox RFP strategically declined. Deal closed. No re-engagement. | NO |
+| 21 | ~~Hiscox RFP pricing~~ | ~~Cannot submit without pricing~~ | RESOLVED Mar 13 — deal closed, N/A | NO |
+| 22 | ~~Hiscox reference customers~~ | ~~RFP requires references~~ | RESOLVED Mar 13 — deal closed, N/A | NO |
+| 23 | ~~Hiscox MSA/SOW review~~ | ~~Requires attorney review~~ | RESOLVED Mar 13 — deal closed, N/A | NO |
+| 24 | ~~Hiscox policy documents~~ | ~~Ethics/BCP/H&S policy requested~~ | RESOLVED Mar 13 — deal closed, N/A | NO |
+| 25 | FileForms: CaseGlide FL Annual Report due May 1 | $400 late fee if missed. | NOT STARTED — calendar reminder needed | NO |
+| 26 | Email send auth setup required | `send_email_graph.py` built but needs Azure App Registration + one-time MSAL login to activate | Run `python3 scripts/email_auth_setup.py` — add AZURE_CLIENT_ID + AZURE_TENANT_ID to .env.local first | **YES — blocks autonomous email** |
 | 19 | ~~Pipedrive deal creation process~~ | ~~Pacific Specialty needs adding~~ | RESOLVED Mar 5 — Pacific Specialty deal created in Pipedrive (Discovery stage, New Logo pipeline, Anisha Basi contact). Process: contact person + org + title + pipeline stage + save. | NO |
 | 13 | ~~Campaign funnel conversion broken~~ | ~~7,833 Apollo contacts could consume all content with zero capture~~ | RESOLVED Mar 2 — /api/briefing-capture, email gate, ScheduleModal wired, program selection capture, CaseGlide.com links added | NO |
 | 14 | ~~Resend API key needed~~ | ~~/api/briefing-capture requires RESEND_API_KEY env var~~ | RESOLVED Mar 3 — RESEND_API_KEY, NOTIFICATION_EMAIL, NOTIFICATION_CC added to .env.local + Vercel env vars, redeployed | NO |

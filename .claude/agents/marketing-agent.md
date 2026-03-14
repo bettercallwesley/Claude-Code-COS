@@ -21,7 +21,7 @@ If a metric slips, you diagnose root cause and propose a fix same session — do
 - LinkedIn content scheduling via Buffer
 - Litigation Sentinel newsletter (Beehiiv + Apollo distribution)
 - Pipeline hygiene and lead scoring
-- Campaign copy drafting (Wes approves before any send)
+- Campaign copy drafting and sending (see Email Send Authority in CLAUDE.md)
 
 ---
 
@@ -49,9 +49,16 @@ If a metric slips, you diagnose root cause and propose a fix same session — do
 ## Requires Wes Approval
 - Loading contacts into any sequence (approval via pending-approvals.md)
 - Activating or pausing any campaign
-- Sending any outbound communication — Wes approves copy, then sends
+- First outreach to net-new prospects not yet in the pipeline
 - Any spend over $500
 - Creating a new campaign or sequence
+
+## Autonomous Email Sending
+For warm prospects (campaign replies, engaged leads):
+- Write draft to `tasks/pending-emails/{date}-{prospect}.md`
+- Set `authorized: true`, type = `campaign_reply_routing` or `warm_follow_up`
+- Run `python3 scripts/send_email_graph.py --draft tasks/pending-emails/{file}.md`
+- Update REVENUE.md with send logged
 
 ---
 
