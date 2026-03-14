@@ -22,32 +22,11 @@
 
 ---
 
-### 2. Hiscox — ITB DEADLINE PASSED MAR 9 — CONFIRM SUBMISSION
-**Stage:** RFP Response In Progress
-**Contact:** Sroop Grewal (procurement organizer) | sroop.grewal@hiscox.com
-**Last Action:** Intent to Bid email DRAFTED Mar 9 (CaseGlide 2026/tasks/hiscox-intent-to-bid-email.md). Deadline was Mar 9. Submission status UNKNOWN.
-**Known Constraints:** No DUNS, no FSQS, not insured by Hiscox — SOC 2 Type II is primary cert
-**Open Items:**
-- [x] Portal submission confirmed
-- [x] All-hands RFP call attended Mar 6
-- [x] RFP documents reviewed (14 files)
-- [x] Full RFP response drafted (Hiscox_RFP_Response_DRAFT.md — 1,500 lines)
-- [x] Questions file created (Hiscox_RFP_Questions_for_Wes.md — 14 items)
-- [x] 15 narrative responses written (Q1-Q15)
-- [x] 47 requirements responded to (44 Fully, 2 Partially, 1 Alternative)
-- [x] NAIC AI Evaluation Form completed (4 models)
-- [x] NDA eSigned Mar 6 (confirmed in Gmail)
-- [x] Intent to Bid email DRAFTED — CaseGlide 2026/tasks/hiscox-intent-to-bid-email.md
-- [ ] **WES: CONFIRM — Was Intent to Bid email sent to sroop.grewal@hiscox.com?**
-- [ ] **WES: CONFIRM — Was iValua portal logged to confirm ITB?**
-- [ ] Wes to review response draft + answer 14 questions (pricing, references, legal)
-- [ ] Pricing Book (P1-P5 + day rates) — Wes input required
-- [ ] Reference customers — confirm FIGA + PURE willingness
-- [ ] MSA + SOW legal review — Wes must review as attorney
-- [ ] Transfer answers to Excel response pack template
-- [ ] Final submission deadline: **March 31**
-**Next Action:** Wes sends Intent to Bid email TODAY + portal confirmation. Full RFP response due Mar 31.
-**Owner:** Wes (ITB today + pricing + legal), COS (finalization)
+### 2. Hiscox — CLOSED (Declined Mar 13)
+**Stage:** CLOSED — No bid
+**Contact:** Sroop Grewal | sroop.grewal@hiscox.com
+**Last Action:** RFP declined via iValua portal. Sroop followed up Mar 13 asking for rationale. Wes confirmed final decision: no re-engagement. 4-year pattern of ghosting and using RFPs for free requirements gathering.
+**Next Action:** None.
 
 ---
 

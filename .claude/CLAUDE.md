@@ -119,8 +119,13 @@ Emails appear in Sent Items as if sent by Wes. Auth token cached at `.claude/ema
 ### Workflow:
 1. Write draft to `tasks/pending-emails/{YYYY-MM-DD}-{prospect-slug}.md` with frontmatter
 2. Review draft is correct and `authorized: true` is set
-3. Call `python3 scripts/send_email_graph.py --draft tasks/pending-emails/{file}.md`
-4. Log appears in `tasks/email-send-log.md`, draft moves to `tasks/sent-emails/`
+3. Send via **Playwright** (primary — works now, no setup needed):
+   - Navigate to outlook.office365.com, log in with credentials from .env.local
+   - OUTLOOK_LOGIN_EMAIL / OUTLOOK_LOGIN_PASSWORD
+   - Compose and send each draft
+4. OR send via **Graph API script** (upgrade path — requires Azure setup):
+   - `python3 scripts/send_email_graph.py --draft tasks/pending-emails/{file}.md`
+5. Move draft to `tasks/sent-emails/`, log in `tasks/email-send-log.md`
 
 ### Draft format:
 ```
